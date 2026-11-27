@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="uz" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self';">
+  <title>Mobile Preview</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="toolbar" id="toolbar">
+    <div class="brand" aria-hidden="true">
+      <svg class="brand-mark" viewBox="0 0 32 32" width="22" height="22">
+        <rect x="8" y="3" width="16" height="26" rx="4.5" fill="none" stroke="currentColor" stroke-width="2.2"/>
+        <rect x="13" y="6.2" width="6" height="2" rx="1" fill="currentColor"/>
+        <circle cx="16" cy="18" r="3.4" fill="var(--accent)"/>
+      </svg>
+      <span class="brand-name">Mobile Preview</span>
+    </div>
+
+    <div class="tb-group">
+      <button class="tb-btn" id="btn-back" data-i18n-title="back" disabled></button>
+      <button class="tb-btn" id="btn-forward" data-i18n-title="forward" disabled></button>
+      <button class="tb-btn" id="btn-reload" data-i18n-title="reload"></button>
+    </div>
+
+    <div class="url-wrap" id="url-wrap">
+      <span class="url-icon" id="url-icon"></span>
+      <input id="url" type="text" spellcheck="false" autocomplete="off"
+             data-i18n-placeholder="urlPlaceholder" data-i18n-aria="urlLabel">
+      <span class="url-progress" id="url-progress"></span>
+      <div class="suggest" id="suggest" role="listbox" hidden></div>
+    </div>
+
+    <div class="spacer"></div>
+
+    <div class="tb-group">
+      <button class="tb-pill" id="btn-devices" popovertarget="pop-devices">
+        <span class="tb-pill-icon"></span>
+        <span data-i18n="devices"></span>
+        <span class="count" id="device-count">0</span>
+      </button>
+
+      <div class="zoom" role="group">
+        <button class="tb-btn sm" id="zoom-fit" data-i18n-title="zoomFit"></button>
+        <button class="tb-btn sm" id="zoom-out" data-i18n-title="zoomOut"></button>
+        <button class="zoom-label" id="zoom-label">100%</button>
+        <button class="tb-btn sm" id="zoom-in" data-i18n-title="zoomIn"></button>
+      </div>
+
+      <button class="tb-btn" id="btn-scheme"></button>
+      <button class="tb-btn" id="btn-sync" data-i18n-title="sync" aria-pressed="true"></button>
+      <button class="tb-btn" id="btn-qr" data-i18n-title="qr" popovertarget="pop-qr"></button>
+      <button class="tb-btn" id="btn-settings" data-i18n-title="settings" popovertarget="pop-settings"></button>
+    </div>
+  </header>
+
+  <main class="canvas" id="canvas">
+    <div class="stage" id="stage"></div>
+    <div class="empty" id="empty" hidden>
+      <h2 data-i18n="emptyTitle"></h2>
+      <p data-i18n="emptyText"></p>
+      <button class="btn btn-primary" id="empty-add" popovertarget="pop-devices" data-i18n="addDevice"></button>
+    </div>
+  </main>
+
+  <div class="pop pop-devices" id="pop-devices" popover></div>
+  <div class="pop pop-qr" id="pop-qr" popover></div>
+  <div class="pop pop-settings" id="pop-settings" popover></div>
+  <div class="pop pop-menu" id="pop-shot" popover></div>
+
+  <div class="drop" id="drop" hidden>
+    <div class="drop-box">
+      <span class="drop-icon" id="drop-icon"></span>
+      <span data-i18n="dropHere"></span>
+    </div>
+  </div>
+
+  <div class="toasts" id="toasts" aria-live="polite"></div>
+
+  <script src="i18n.js"></script>
+  <script src="icons.js"></script>
+  <script src="devices.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

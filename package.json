@@ -1,0 +1,62 @@
+{
+  "name": "mobile-preview",
+  "productName": "Mobile Preview",
+  "version": "1.0.0",
+  "description": "Desktop emulator that shows how web projects look on real phone and tablet screens.",
+  "main": "src/main.js",
+  "author": {
+    "name": "Hayotbek Ismoilov",
+    "url": "https://github.com/ismoillooff"
+  },
+  "homepage": "https://github.com/ismoillooff/Mobile-Preview#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ismoillooff/Mobile-Preview.git"
+  },
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "icon": "electron scripts/make-icon.js",
+    "smoke": "node scripts/smoke.js",
+    "dist": "electron-builder --win portable nsis --x64",
+    "dist:portable": "electron-builder --win portable --x64",
+    "dist:dir": "electron-builder --win dir --x64"
+  },
+  "dependencies": {
+    "qrcode": "^1.5.4"
+  },
+  "devDependencies": {
+    "electron": "^45.5.0",
+    "electron-builder": "^26.18.0"
+  },
+  "build": {
+    "appId": "uz.mobilepreview.app",
+    "productName": "Mobile Preview",
+    "copyright": "Copyright © 2026 Hayotbek Ismoilov",
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "files": [
+      "src/**/*",
+      "package.json"
+    ],
+    "win": {
+      "icon": "build/icon.png",
+      "target": [
+        "portable",
+        "nsis"
+      ]
+    },
+    "portable": {
+      "artifactName": "MobilePreview-Portable.exe"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "shortcutName": "Mobile Preview",
+      "artifactName": "MobilePreview-Setup.exe"
+    }
+  }
+}
