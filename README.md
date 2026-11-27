@@ -247,34 +247,17 @@ Qurilma sarlavhasidagi 📷 tugmasi sahifani qurilmaning haqiqiy piksel o‘lcha
 
 ```mermaid
 flowchart LR
-    subgraph Main["Asosiy jarayon · main.js"]
-        CDP["CDP emulyatsiya<br/>webContents.debugger"]
-        SHOT["Skrinshot<br/>Page.captureScreenshot"]
-        PERM["Ruxsatlar, sertifikatlar,<br/>kontekst menyu"]
-        SRV["Statik server + fs.watch<br/>static-server.js"]
-        SCAN["Port skaneri<br/>ports.js"]
-        QR["QR va LAN<br/>qrcode"]
-    end
-    subgraph UI["Interfeys · renderer/"]
-        APP["app.js<br/>toolbar, masshtab, sinxron navigatsiya"]
-        DEVS["devices.js<br/>katalog, geometriya, user-agent"]
-    end
-    subgraph Screens["Qurilma ekranlari · webview"]
-        W1["iPhone"]
-        W2["Galaxy"]
-        W3["iPad"]
-    end
-    APP -->|"IPC · preload.js · window.mp"| CDP
-    APP --> SCAN
-    APP --> QR
-    APP --> W1
-    APP --> W2
-    APP --> W3
-    CDP --> Screens
-    SHOT --> Screens
-    SRV -->|"http://127.0.0.1:4650"| Screens
-    SRV -.->|"fayl o‘zgardi"| APP
-    DEVS --> APP
+    A["Manzil qatori<br/>port · URL · papka"] --> B{"Manba"}
+    B -->|"dev server"| C["localhost:5173<br/>Vite · Next.js · Django"]
+    B -->|"papka / HTML"| D["Ichki server<br/>127.0.0.1:4650"]
+    C --> E["webview<br/>har bir qurilma uchun"]
+    D --> E
+    E --> F["CDP emulyatsiya<br/>viewport · DPR · UA · touch"]
+    F --> G["Qurilma ramkasi<br/>status bar · Dynamic Island"]
+    D -.->|"fayl saqlandi"| H["Live reload"]
+    H -.-> E
+    G --> I["Skrinshot<br/>asl o‘lchamda"]
+    G --> J["QR<br/>haqiqiy telefon"]
 ```
 
 | Qatlam | Fayllar | Vazifasi |
