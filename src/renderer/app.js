@@ -122,7 +122,7 @@
       const p = this.preset;
       const platform = D.platformOf(p);
       this.el = html(`
-        <section class="device" data-frame="${p.frame}" data-platform="${platform}">
+        <section class="device" data-frame="${p.frame}" data-platform="${platform}" data-model="${esc(p.id)}" data-brand="${esc(D.categoryOf(p).brand)}">
           <header class="device-head">
             <div class="device-title">
               <span class="device-name" title="${esc(p.name)}">${esc(p.name)}</span>
@@ -136,7 +136,9 @@
             </div>
           </header>
           <div class="frame">
-            <span class="hw hw-a"></span><span class="hw hw-b"></span><span class="hw hw-c"></span>
+            <span class="hw hw-power"></span><span class="hw hw-volume-up"></span><span class="hw hw-volume-down"></span>
+            <span class="hw hw-action"></span><span class="hw hw-camera"></span>
+            <span class="earpiece"></span>
             <span class="classic-speaker"></span><span class="classic-home"></span><span class="tablet-cam"></span>
             <div class="screen">
               <div class="statusbar"><span class="sb-left"></span><span class="sb-mid"></span><span class="sb-right"></span></div>
@@ -217,15 +219,17 @@
       const mid = $('.sb-mid', this.el);
       const right = $('.sb-right', this.el);
       const time = '<span class="sb-time"></span>';
+      if (D.platformOf(this.preset) === 'android') {
+        left.innerHTML = time;
+        right.innerHTML = G.androidWifi + G.androidSignal + G.androidBattery;
+        updateClocks(this.el);
+        return;
+      }
       switch (this.preset.frame) {
         case 'classic':
           left.innerHTML = G.signal + G.wifi;
           mid.innerHTML = time;
           right.innerHTML = G.battery;
-          break;
-        case 'punch':
-          left.innerHTML = time;
-          right.innerHTML = G.wifi + G.signal + G.battery;
           break;
         case 'tablet':
           left.innerHTML = `${time}<span class="sb-date"></span>`;
@@ -261,6 +265,7 @@
       };
       for (const [k, v] of Object.entries(vars)) s.setProperty(`--${k}`, String(v));
       this.el.classList.toggle('is-landscape', !!this.entry.landscape);
+      this.el.classList.toggle('wide-notch', g.wideNotch);
       this.el.classList.toggle('no-frame', !state.frame);
       this.el.classList.toggle('no-statusbar', !g.sb);
       this.el.dataset.indicator = g.indicator || 'none';
@@ -436,7 +441,12 @@
       if (withFrame) {
         await nextFrame();
         const r = $('.frame', this.el).getBoundingClientRect();
-        res = await api.screenshotRect({ x: r.left, y: r.top, width: r.width, height: r.height }, `${name}-frame`);
+        const margin = state.frame ? Math.ceil(3 * this.scale) : 0;
+        const x = Math.max(0, Math.floor(r.left) - margin);
+        const y = Math.max(0, Math.floor(r.top) - margin);
+        res = await api.screenshotRect({
+          x, y, width: Math.ceil(r.right) + margin - x, height: Math.ceil(r.bottom) + margin - y,
+        }, `${name}-frame`);
       } else {
         if (!this.wcId) return;
         res = await api.screenshot(this.wcId, name);
@@ -606,12 +616,8 @@
     const s = String(raw || '').trim();
     if (!s) return { url: '' };
     if (/^[a-z]:[\\/]/i.test(s) || s.startsWith('\\\\')) return { local: s };
-    if (/^file:\/\//i.test(s)) {
-      try {
-        const u = new URL(s);
-        return { local: decodeURIComponent(u.pathname.replace(/^\/([a-z]:)/i, '$1')) };
-      } catch { /* fall through */ }
-    }
+    if (/^file:\/\//i.test(s)) return { local: s };
+    if (info.platform === 'darwin' && (s.startsWith('~/') || (s.startsWith('/') && !s.startsWith('//')))) return { local: s };
     if (/^\d{2,5}$/.test(s)) return { url: `http://localhost:${s}/` };
     if (/^:\d{2,5}(\/.*)?$/.test(s)) return { url: toHref(`http://localhost${s}`) };
     if (/^[a-z][a-z\d+.-]*:\/\//i.test(s)) return { url: toHref(s) };
@@ -890,12 +896,33 @@
         <div class="dev-group-label">${esc(t(key))}</div>
         ${list.map(opt).join('')}
       </div>` : '');
-    const presets = D.PRESETS;
+    const categories = new Map();
+    for (const preset of D.PRESETS) {
+      const { brand, family } = D.categoryOf(preset);
+      if (!categories.has(brand)) categories.set(brand, new Map());
+      const families = categories.get(brand);
+      if (!families.has(family)) families.set(family, []);
+      families.get(family).push(preset);
+    }
+    const catalogue = Array.from(categories, ([brand, families]) => {
+      const all = Array.from(families.values()).flat();
+      return `
+        <details class="device-brand" open>
+          <summary>${esc(brand)}<span>${all.length}</span></summary>
+          ${Array.from(families).sort(([a], [b]) => a.localeCompare(b, 'en', { numeric: true })).map(([family, list]) => `
+            <details class="device-family" ${list.some((p) => active.has(p.id)) ? 'open' : ''}>
+              <summary>${esc(family)}<span>${list.length}</span></summary>
+              ${list.slice().sort((a, b) => a.name.localeCompare(b.name, 'en', { numeric: true })).map(opt).join('')}
+            </details>`).join('')}
+        </details>`;
+    }).join('');
     els.popDevices.innerHTML = `
       <div class="pop-head">${esc(t('devicesTitle'))}</div>
-      ${group('groupIos', presets.filter((p) => p.group === 'ios'))}
-      ${group('groupAndroid', presets.filter((p) => p.group === 'android'))}
-      ${group('groupTablet', presets.filter((p) => p.group === 'tablet'))}
+      <label class="device-search"><span class="sr-only">${esc(t('deviceSearch'))}</span>
+        <input class="field" type="search" data-device-search placeholder="${esc(t('deviceSearch'))}">
+      </label>
+      <div class="device-catalogue">${catalogue}</div>
+      <p class="device-no-results" hidden>${esc(t('deviceNoResults'))}</p>
       ${group('groupCustom', state.customDevices || [])}
       <div class="dev-group">
         <div class="dev-group-label">${esc(t('customTitle'))}</div>
@@ -909,6 +936,36 @@
           <div class="actions"><button class="btn btn-primary sm" type="submit">${icon('plus', 14)}${esc(t('add'))}</button></div>
         </form>
       </div>`;
+  }
+
+  function filterDevices(e) {
+    if (!e.target.matches('[data-device-search]')) return;
+    const query = e.target.value.trim().toLocaleLowerCase();
+    let matches = 0;
+    for (const brand of els.popDevices.querySelectorAll('.device-brand')) {
+      let brandMatches = 0;
+      for (const family of brand.querySelectorAll('.device-family')) {
+        if (!family.hasAttribute('data-was-open')) family.dataset.wasOpen = String(family.open);
+        let familyMatches = 0;
+        for (const button of family.querySelectorAll('.dev-opt')) {
+          const preset = findPreset(button.dataset.id);
+          const category = D.categoryOf(preset);
+          const text = `${category.brand} ${preset.name}`.toLocaleLowerCase();
+          button.hidden = !text.includes(query);
+          if (!button.hidden) familyMatches++;
+        }
+        family.hidden = familyMatches === 0;
+        family.open = query ? familyMatches > 0 : family.dataset.wasOpen === 'true';
+        if (!query) delete family.dataset.wasOpen;
+        brandMatches += familyMatches;
+      }
+      if (!brand.hasAttribute('data-was-open')) brand.dataset.wasOpen = String(brand.open);
+      brand.hidden = brandMatches === 0;
+      brand.open = query ? brandMatches > 0 : brand.dataset.wasOpen === 'true';
+      if (!query) delete brand.dataset.wasOpen;
+      matches += brandMatches;
+    }
+    els.popDevices.querySelector('.device-no-results').hidden = matches > 0;
   }
 
   function onDevicesPopoverClick(e) {
@@ -1277,6 +1334,7 @@
       placeBelow(els.popDevices, els.devicesBtn);
     });
     els.popDevices.addEventListener('click', onDevicesPopoverClick);
+    els.popDevices.addEventListener('input', filterDevices);
     els.popDevices.addEventListener('submit', onCustomSubmit);
 
     els.popSettings.addEventListener('beforetoggle', (e) => {
@@ -1326,6 +1384,7 @@
 
   async function init() {
     info = await api.info();
+    document.documentElement.dataset.platform = info.platform;
     const saved = (await api.getSettings()) || {};
     state = { ...DEFAULTS, ...saved };
     if (info.smokeState) Object.assign(state, info.smokeState);

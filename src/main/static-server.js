@@ -111,10 +111,15 @@ class StaticServer extends EventEmitter {
   stop() {
     if (this.watcher) this.watcher.close();
     if (this.server) this.server.close();
-    if (this.lanServer) this.lanServer.close();
+    this.stopSharing();
     this.watcher = null;
     this.server = null;
+  }
+
+  stopSharing() {
+    if (this.lanServer) this.lanServer.close();
     this.lanServer = null;
+    this.lanHost = null;
   }
 
   /** Map a local file or folder to a URL on this server, switching the served root if needed. */
@@ -165,7 +170,7 @@ class StaticServer extends EventEmitter {
 
   shareOnLan(host) {
     if (this.lanServer && this.lanHost === host) return Promise.resolve();
-    if (this.lanServer) this.lanServer.close();
+    this.stopSharing();
     return new Promise((resolve, reject) => {
       const srv = http.createServer((req, res) => this.handle(req, res));
       srv.once('error', reject);

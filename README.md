@@ -2,18 +2,19 @@
 
 <img src="src/assets/icon.png" width="104" height="104" alt="Mobile Preview ikonkasi">
 
-# 📱 Mobile Preview — veb-loyihalar uchun telefon emulyatori
+# 📱 Mobile Preview 1.1 — veb-loyihalar uchun telefon emulyatori
 
-**Saytingiz iPhone, Samsung Galaxy, Redmi, Pixel va iPad ekranlarida qanday ko‘rinishini kompyuterning o‘zida, bir vaqtning o‘zida ko‘rsatadigan Windows ilovasi**
+**Saytingiz iPhone, Samsung Galaxy, Redmi, Pixel va iPad ekranlarida qanday ko‘rinishini bir vaqtning o‘zida ko‘rsatadigan Windows va macOS ilovasi**
 
 Haqiqiy qurilma emulyatsiyasi · Bir nechta qurilma yonma-yon · Dev serverni avtomatik topish · Live reload · QR orqali telefonda ochish · Asl o‘lchamdagi skrinshot
 
+![macOS](https://img.shields.io/badge/macOS-13%2B_Apple_Silicon-000000?logo=apple&logoColor=white)
 ![Windows](https://img.shields.io/badge/Windows-10%20%7C%2011%20x64-0078D4?logo=windows&logoColor=white)
 ![Electron](https://img.shields.io/badge/Electron-45-47848F?logo=electron&logoColor=white)
 ![Chromium](https://img.shields.io/badge/Chrome_DevTools-Protocol-4285F4?logo=googlechrome&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-vanilla-F7DF1E?logo=javascript&logoColor=black)
-![Node.js](https://img.shields.io/badge/Node.js-20%2B-5FA04E?logo=nodedotjs&logoColor=white)
-![Versiya](https://img.shields.io/badge/versiya-1.0.0-3DDC97)
+![Node.js](https://img.shields.io/badge/Node.js-22.12%2B-5FA04E?logo=nodedotjs&logoColor=white)
+![Versiya](https://img.shields.io/badge/versiya-1.1.0-3DDC97)
 ![Til](https://img.shields.io/badge/Til-O%CA%BBzbek%20%C2%B7%20%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9%20%C2%B7%20English-1EB53A)
 ![Smoke test](https://img.shields.io/badge/smoke_test-12_ssenariy-success)
 [![License](https://img.shields.io/badge/License-MIT-yellow)](LICENSE)
@@ -24,9 +25,12 @@ Haqiqiy qurilma emulyatsiyasi · Bir nechta qurilma yonma-yon · Dev serverni av
 
 <br>
 
-[![Portable .exe yuklab olish](https://img.shields.io/badge/Yuklab_olish-Portable_.exe-3DDC97?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/ismoillooff/Mobile-Preview/releases/latest/download/MobilePreview-Portable.exe)
+[![macOS yuklab olish](https://img.shields.io/badge/macOS-Apple_Silicon_DMG-111111?style=for-the-badge&logo=apple&logoColor=white)](https://github.com/ismoillooff/Mobile-Preview/releases/download/v1.1.0/MobilePreview-1.1.0-mac-arm64.dmg)
 &nbsp;
-[![O‘rnatuvchi yuklab olish](https://img.shields.io/badge/Yuklab_olish-O%CA%BBrnatuvchi_(Setup)-1F6FEB?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/ismoillooff/Mobile-Preview/releases/latest/download/MobilePreview-Setup.exe)
+
+[![Portable .exe yuklab olish](https://img.shields.io/badge/Yuklab_olish-Portable_.exe-3DDC97?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/ismoillooff/Mobile-Preview/releases/download/v1.0.0/MobilePreview-Portable.exe)
+&nbsp;
+[![O‘rnatuvchi yuklab olish](https://img.shields.io/badge/Yuklab_olish-O%CA%BBrnatuvchi_(Setup)-1F6FEB?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/ismoillooff/Mobile-Preview/releases/download/v1.0.0/MobilePreview-Setup.exe)
 
 </div>
 
@@ -34,13 +38,13 @@ Haqiqiy qurilma emulyatsiyasi · Bir nechta qurilma yonma-yon · Dev serverni av
   <img src="docs/screenshots/hero.png" alt="Mobile Preview: iPhone 15 Pro, Galaxy S24 va iPad mini bitta sahifani yonma-yon ko‘rsatmoqda" width="100%">
 </p>
 
-> Hujjat holati: README 2026-11-27 dagi kodga (v1.0.0) mos keladi.
+> macOS uchun v1.1.0, Windows uchun v1.0.0 tayyor paketlari quyida.
 
 ---
 
 ## 📖 Loyiha haqida
 
-**Mobile Preview** — frontend dasturchilar, dizaynerlar va QA mutaxassislari uchun Windows ilovasi. Siz yozayotgan sayt (Vite, React, Next.js, Vue, Angular, Django shablonlari yoki oddiy HTML) telefon va planshet ekranlarida qanday ko‘rinishini bitta oynada, bir nechta qurilmada birdaniga ko‘rsatadi.
+**Mobile Preview** — frontend dasturchilar, dizaynerlar va QA mutaxassislari uchun Windows va macOS ilovasi. Siz yozayotgan sayt (Vite, React, Next.js, Vue, Angular, Django shablonlari yoki oddiy HTML) telefon va planshet ekranlarida qanday ko‘rinishini bitta oynada, bir nechta qurilmada birdaniga ko‘rsatadi.
 
 Bu oddiy “kichraytirilgan brauzer oynasi” emas. Har bir ekran — Chromium’ning **DevTools Protocol** orqali boshqariladigan alohida ko‘rinish. Sahifaga qurilmaning haqiqiy **viewport** o‘lchami, **piksel zichligi (DPR)**, **user-agent**, **sensorli kiritish** va **ekran yo‘nalishi** beriladi. Shuning uchun media query’lar, `devicePixelRatio`, `(pointer: coarse)`, `(hover: none)`, `screen.orientation` va touch hodisalari xuddi telefondagidek ishlaydi.
 
@@ -103,10 +107,12 @@ Bu oddiy “kichraytirilgan brauzer oynasi” emas. Har bir ekran — Chromium�
 
 | Fayl | Turi | Hajmi | Qachon tanlash kerak |
 | --- | --- | --- | --- |
-| [**MobilePreview-Portable.exe**](https://github.com/ismoillooff/Mobile-Preview/releases/latest/download/MobilePreview-Portable.exe) | Portable | ~106 MB | O‘rnatmasdan darhol ishga tushirish uchun. Fleshkadan ham ishlaydi. |
-| [**MobilePreview-Setup.exe**](https://github.com/ismoillooff/Mobile-Preview/releases/latest/download/MobilePreview-Setup.exe) | O‘rnatuvchi | ~116 MB | Start menyu va ish stoli yorlig‘i bilan doimiy o‘rnatish uchun. Tezroq ochiladi. |
+| [**MobilePreview-Portable.exe**](https://github.com/ismoillooff/Mobile-Preview/releases/download/v1.0.0/MobilePreview-Portable.exe) | Portable | ~106 MB | O‘rnatmasdan darhol ishga tushirish uchun. Fleshkadan ham ishlaydi. |
+| [**MobilePreview-Setup.exe**](https://github.com/ismoillooff/Mobile-Preview/releases/download/v1.0.0/MobilePreview-Setup.exe) | O‘rnatuvchi | ~116 MB | Start menyu va ish stoli yorlig‘i bilan doimiy o‘rnatish uchun. Tezroq ochiladi. |
 
 Barcha versiyalar va reliz izohlari: **[Releases](https://github.com/ismoillooff/Mobile-Preview/releases)**.
+
+macOS 13+ va Apple Silicon (M1/M2/M3/M4 va yangilari) uchun [DMG faylini yuklab oling](https://github.com/ismoillooff/Mobile-Preview/releases/download/v1.1.0/MobilePreview-1.1.0-mac-arm64.dmg). DMG ichidagi Mobile Preview ilovasini Applications papkasiga sudrang. Bu build mahalliy imzolangan, Apple notarizatsiyasidan o‘tmagan. Agar macOS ochishni bloklasa, System Settings → Privacy & Security → Open Anyway orqali tasdiqlang. Intel Mac uchun manba koddan build qilish mumkin, tayyor Intel paketi chiqarilmagan.
 
 **Tizim talablari:** Windows 10 yoki 11 (x64), ~400 MB bo‘sh joy. Node.js, brauzer yoki .NET kerak emas — hammasi ilova ichida.
 
@@ -159,7 +165,7 @@ Sozlamalar, qurilmalar ro‘yxati va oxirgi ochilgan sahifalar yangilashda saqla
 
 ### Qurilmalar va ramkalar
 
-- 15 ta tayyor qurilma: 6 ta iPhone, 6 ta Android, 3 ta planshet — va istalgancha **o‘z qurilmangiz**.
+- 37 ta tayyor qurilma: 21 ta iPhone, 13 ta Android telefon, 3 ta planshet — va istalgancha **o‘z qurilmangiz**.
 - Realistik ramkalar: **Dynamic Island**, **notch**, **punch-hole** kamera, iPhone SE’ning **Home** tugmasi, yon tugmalar.
 - **Status bar** (soat, aloqa, Wi-Fi, batareya) sahifaning `theme-color` meta tegi yoki fon rangiga avtomatik bo‘yaladi; matn rangi kontrastga qarab tanlanadi.
 - **Home indicator** sahifa foniga qarab qora yoki oq bo‘ladi.
@@ -216,25 +222,55 @@ Qurilma sarlavhasidagi 📷 tugmasi sahifani qurilmaning haqiqiy piksel o‘lcha
 
 ---
 
+<img src="docs/screenshots/catalogue-macos.png" alt="macOS’da brend, model oilasi va model tanlash oynasi" width="100%">
+
 ## 📱 Qurilmalar katalogi
 
-| Qurilma | Viewport (CSS px) | DPR | Skrinshot o‘lchami | Ramka |
-| --- | --- | --- | --- | --- |
-| iPhone SE | 375 × 667 | 2 | 750 × 1334 | Home tugmasi |
-| iPhone 13 / 14 | 390 × 844 | 3 | 1170 × 2532 | Notch |
-| iPhone 15 Pro | 393 × 852 | 3 | 1179 × 2556 | Dynamic Island |
-| iPhone 16 Pro | 402 × 874 | 3 | 1206 × 2622 | Dynamic Island |
-| iPhone 15 Pro Max | 430 × 932 | 3 | 1290 × 2796 | Dynamic Island |
-| iPhone 16 Pro Max | 440 × 956 | 3 | 1320 × 2868 | Dynamic Island |
-| Galaxy S24 | 360 × 780 | 3 | 1080 × 2340 | Punch-hole |
-| Galaxy S24 Ultra | 384 × 832 | 3.75 | 1440 × 3120 | Punch-hole |
-| Galaxy A51 / A71 | 412 × 914 | 2.625 | 1082 × 2399 | Punch-hole |
-| Redmi Note 13 | 393 × 873 | 2.75 | 1081 × 2401 | Punch-hole |
-| Pixel 8 | 412 × 915 | 2.625 | 1082 × 2402 | Punch-hole |
-| Galaxy Z Fold5 (tashqi ekran) | 344 × 882 | 2.625 | 903 × 2315 | Punch-hole |
-| iPad mini | 744 × 1133 | 2 | 1488 × 2266 | Planshet |
-| iPad Air 11″ | 820 × 1180 | 2 | 1640 × 2360 | Planshet |
-| Galaxy Tab S9 | 800 × 1280 | 2 | 1600 × 2560 | Planshet |
+Tanlash oynasi **brend → model oilasi → model** tartibida ishlaydi. Qidiruvga brend yoki model nomini yozing. Saqlangan eski profil identifikatorlari qo‘llab-quvvatlanadi.
+
+| Brend | Oila | Qurilma | Ekran (CSS px) | DPR | Ramka |
+| --- | --- | --- | --- | --- | --- |
+| Apple | iPad | iPad Air 11″ | 820 × 1180 | 2 | tablet |
+| Apple | iPad | iPad mini | 744 × 1133 | 2 | tablet |
+| Apple | iPhone 12 | iPhone 12 | 390 × 844 | 3 | notch |
+| Apple | iPhone 12 | iPhone 12 mini | 375 × 812 | 3 | notch |
+| Apple | iPhone 12 | iPhone 12 Pro | 390 × 844 | 3 | notch |
+| Apple | iPhone 12 | iPhone 12 Pro Max | 428 × 926 | 3 | notch |
+| Apple | iPhone 13 | iPhone 13 | 390 × 844 | 3 | notch |
+| Apple | iPhone 13 | iPhone 13 mini | 375 × 812 | 3 | notch |
+| Apple | iPhone 13 | iPhone 13 Pro | 390 × 844 | 3 | notch |
+| Apple | iPhone 13 | iPhone 13 Pro Max | 428 × 926 | 3 | notch |
+| Apple | iPhone 14 | iPhone 14 | 390 × 844 | 3 | notch |
+| Apple | iPhone 14 | iPhone 14 Plus | 428 × 926 | 3 | notch |
+| Apple | iPhone 14 | iPhone 14 Pro | 393 × 852 | 3 | island |
+| Apple | iPhone 14 | iPhone 14 Pro Max | 430 × 932 | 3 | island |
+| Apple | iPhone 15 | iPhone 15 | 393 × 852 | 3 | island |
+| Apple | iPhone 15 | iPhone 15 Plus | 430 × 932 | 3 | island |
+| Apple | iPhone 15 | iPhone 15 Pro | 393 × 852 | 3 | island |
+| Apple | iPhone 15 | iPhone 15 Pro Max | 430 × 932 | 3 | island |
+| Apple | iPhone 16 | iPhone 16 | 393 × 852 | 3 | island |
+| Apple | iPhone 16 | iPhone 16 Plus | 430 × 932 | 3 | island |
+| Apple | iPhone 16 | iPhone 16 Pro | 402 × 874 | 3 | island |
+| Apple | iPhone 16 | iPhone 16 Pro Max | 440 × 956 | 3 | island |
+| Apple | iPhone SE | iPhone SE | 375 × 667 | 2 | classic |
+| Google | Pixel 7 | Pixel 7 | 412 × 915 | 2.625 | punch |
+| Google | Pixel 7 | Pixel 7a | 412 × 915 | 2.625 | punch |
+| Google | Pixel 8 | Pixel 8 | 412 × 915 | 2.625 | punch |
+| Google | Pixel 8 | Pixel 8a | 412 × 915 | 2.625 | punch |
+| Samsung | Galaxy A | Galaxy A51 | 412 × 914 | 2.625 | punch |
+| Samsung | Galaxy A | Galaxy A71 | 412 × 914 | 2.625 | punch |
+| Samsung | Galaxy S | Galaxy S23 | 360 × 780 | 3 | punch |
+| Samsung | Galaxy S | Galaxy S23+ | 384 × 832 | 2.8125 | punch |
+| Samsung | Galaxy S | Galaxy S24 | 360 × 780 | 3 | punch |
+| Samsung | Galaxy S | Galaxy S24 Ultra | 384 × 832 | 3.75 | punch |
+| Samsung | Galaxy S | Galaxy S24+ | 384 × 832 | 3.75 | punch |
+| Samsung | Galaxy Tab | Galaxy Tab S9 | 800 × 1280 | 2 | tablet |
+| Samsung | Galaxy Z | Galaxy Z Fold5 (cover) | 344 × 882 | 2.625 | punch |
+| Xiaomi | Redmi | Redmi Note 13 | 393 × 873 | 2.75 | punch |
+
+Ramka geometriyasi va material ranglari vizual yaqinlashtirishdir. Android profillari tanlangan ekran zichligiga asoslangan, telefonning display-size sozlamasi amaldagi CSS viewportni o‘zgartirishi mumkin.
+
+Model ma’lumotlari uchun [Apple taqqoslash sahifasi](https://www.apple.com/iphone/compare/), [Samsung S24 ekran tavsifi](https://www.samsung.com/ae/support/mobile-devices/what-are-the-sizes-and-the-resolution-of-the-new-s24-series/) va [Google Pixel texnik tavsifi](https://support.google.com/pixelphone/answer/7158570) ko‘rildi.
 
 > [!NOTE]
 > Jadvaldagi o‘lchamlar — to‘liq ekran. Status bar yoqilganda sahifaga uning balandligi ayirib beriladi (masalan, iPhone 15 Pro: **393 × 798**, Galaxy S24: **360 × 748**), skrinshot ham shu viewport bo‘yicha olinadi. Aniq qiymat har bir qurilma nomi ostida ko‘rsatiladi. Albom rejimida telefonlarning status bari yashiriladi.
@@ -355,6 +391,8 @@ Qurilma sarlavhasidagi 📷 → **Ramkasi bilan** — qurilma ramkasi bilan PNG 
 
 Yorliqlar qurilma ekrani ichida fokus bo‘lganda ham ishlaydi.
 
+macOS’da `Ctrl` o‘rniga `⌘` ishlatiladi. Orqaga va oldinga o‘tish uchun `⌘ + [` va `⌘ + ]` tugmalarini bosing.
+
 ---
 
 ## 🧰 Texnologiyalar va talablar
@@ -370,8 +408,8 @@ Yorliqlar qurilma ekrani ichida fokus bo‘lganda ham ishlaydi.
 
 | Kim uchun | Talab |
 | --- | --- |
-| Foydalanuvchi | Windows 10 / 11 x64 |
-| Dasturchi | Node.js 20+, npm, Git |
+| Foydalanuvchi | Windows 10 / 11 x64 yoki macOS 13+ |
+| Dasturchi | Node.js 22.12+, npm, Git |
 | EXE yig‘ish | Yuqoridagilar + qisqa papka yo‘li (NSIS cheklovi, [pastda](#-git-va-github)) |
 
 ---
@@ -413,11 +451,15 @@ Mobile-Preview/
 ```bash
 git clone https://github.com/ismoillooff/Mobile-Preview.git
 cd Mobile-Preview
-npm install
+npm ci
 npm start
 ```
 
-`npm install` Electron’ni (~110 MB) yuklab oladi. Ilova kodi build qilinmaydi — `src/` dagi fayllarni o‘zgartirib, ilovani qayta ochish kifoya. Ishlab chiqish rejimida `Ctrl + Shift + I` ilova oynasining o‘z DevTools’ini ochadi.
+Electron birinchi ishga tushirishda yuklab olinadi. Ilova kodi build qilinmaydi — `src/` dagi fayllarni o‘zgartirib, ilovani qayta ochish kifoya. Ishlab chiqish rejimida `Ctrl + Shift + I` ilova oynasining o‘z DevTools’ini ochadi.
+
+macOS’da manzil qatoriga `/Users/...` yoki `~/...` ko‘rinishidagi papka yoki fayl yo‘lini yozish mumkin. Ilova oynasining DevTools’i `⌘ + Shift + I` bilan ochiladi.
+
+macOS’da DMG va ZIP yaratish uchun `npm run dist:mac -- --arm64` (Apple Silicon) yoki `npm run dist:mac -- --x64` (Intel) ni bajaring. Fayllar `dist/` papkasiga chiqadi. Developer ID sertifikatisiz mahalliy sinov buildi uchun buyruqqa `--config.mac.identity=-` qo‘shing. Ommaviy tarqatish uchun Developer ID bilan imzolash va Apple notarizatsiyasi kerak.
 
 ---
 
@@ -429,6 +471,7 @@ npm start
 | `npm run dist` | Portable `.exe` va o‘rnatuvchini `dist/` ga yig‘ish |
 | `npm run dist:portable` | Faqat portable `.exe` |
 | `npm run dist:dir` | O‘rnatuvchisiz papka (`dist/win-unpacked`) — eng tez, sinov uchun |
+| `npm run dist:mac` | Joriy Mac arxitekturasi uchun DMG va ZIP |
 | `npm run icon` | `build/icon.png` va `src/assets/icon.png` ni SVG’dan qayta yaratish |
 | `npm run smoke -- <papka> [url]` | Avtomatik smoke test ([batafsil](#-test-va-tekshiruv)) |
 
@@ -441,6 +484,8 @@ npm start
 | Sozlamalar | `%APPDATA%\Mobile Preview\settings.json` |
 | Sahifalarning cookie, localStorage va keshi | `%APPDATA%\Mobile Preview\Partitions\preview` |
 | Skrinshotlar | `%USERPROFILE%\Pictures\Mobile Preview` |
+
+macOS’da sozlamalar va brauzer profili `~/Library/Application Support` ichida, skrinshotlar `~/Pictures/Mobile Preview` papkasida saqlanadi.
 
 | Kalit | Standart qiymat | Vazifasi |
 | --- | --- | --- |
@@ -583,7 +628,7 @@ Zaifliklar haqida xabar berish tartibi: [SECURITY.md](SECURITY.md).
 - Sinxron navigatsiyada SPA marshruti o‘zgarsa, boshqa qurilmalar sahifani to‘liq qayta yuklaydi (holat saqlanmaydi).
 - Ramkali skrinshot monitor o‘lchamida olinadi; asl piksel o‘lchami faqat **Faqat ekran** rejimida.
 - EXE hozircha raqamli imzosiz — SmartScreen ogohlantirishi chiqadi.
-- Faqat Windows uchun yig‘iladi (kod macOS/Linux’da ham `npm start` bilan ishlashi mumkin, lekin sinovdan o‘tmagan).
+- Linux uchun distributiv sozlanmagan.
 
 ---
 
@@ -607,7 +652,7 @@ gh release create v1.0.1 dist/MobilePreview-Portable.exe dist/MobilePreview-Setu
   --title "Mobile Preview 1.0.1" --notes "O‘zgarishlar ro‘yxati"
 ```
 
-Fayl nomlari versiyasiz bo‘lgani uchun README’dagi `releases/latest/download/...` havolalari har doim eng so‘nggi relizga olib boradi.
+Yuklab olish tugmalari platformaga mos relizga bog‘langan. macOS tugmasi v1.1.0 DMG paketini, Windows tugmalari v1.0.0 EXE paketlarini ochadi.
 
 > [!NOTE]
 > NSIS (o‘rnatuvchi yig‘uvchi) Windows’ning 260 belgilik yo‘l cheklovini qo‘llab-quvvatlamaydi. Loyiha juda chuqur papkada bo‘lsa, `extractAppPackage.nsh` topilmadi xatosi chiqadi — loyihani qisqa yo‘lga (masalan, `C:\src\Mobile-Preview`) ko‘chirib yig‘ing.
@@ -669,15 +714,15 @@ Loyiha **[MIT litsenziyasi](LICENSE)** ostida tarqatiladi: kodni bepul ishlatish
 
 ## 🇷🇺 Кратко по-русски
 
-**Mobile Preview** — приложение для Windows, которое показывает, как ваш сайт выглядит на iPhone, Samsung Galaxy, Redmi, Pixel и iPad — сразу на нескольких устройствах. Эмуляция через Chrome DevTools Protocol: реальные viewport, DPR, user-agent, touch и ориентация. Умеет находить запущенные dev-серверы, открывать папки с live reload, показывать QR для открытия на реальном телефоне и делать скриншоты в исходном разрешении. Интерфейс на узбекском, русском и английском.
+**Mobile Preview** — приложение для Windows и macOS, которое показывает, как ваш сайт выглядит на iPhone, Samsung Galaxy, Redmi, Pixel и iPad — сразу на нескольких устройствах. Эмуляция через Chrome DevTools Protocol: реальные viewport, DPR, user-agent, touch и ориентация. Умеет находить запущенные dev-серверы, открывать папки с live reload, показывать QR для открытия на реальном телефоне и делать скриншоты в исходном разрешении. Интерфейс на узбекском, русском и английском.
 
-[Скачать portable .exe](https://github.com/ismoillooff/Mobile-Preview/releases/latest/download/MobilePreview-Portable.exe) · [Скачать установщик](https://github.com/ismoillooff/Mobile-Preview/releases/latest/download/MobilePreview-Setup.exe)
+[Скачать portable .exe](https://github.com/ismoillooff/Mobile-Preview/releases/download/v1.0.0/MobilePreview-Portable.exe) · [Скачать установщик](https://github.com/ismoillooff/Mobile-Preview/releases/download/v1.0.0/MobilePreview-Setup.exe)
 
 ## 🇬🇧 English summary
 
-**Mobile Preview** is a Windows app that shows how your website looks on iPhone, Samsung Galaxy, Redmi, Pixel and iPad screens — several devices side by side. Emulation runs through the Chrome DevTools Protocol, so pages get the real viewport, DPR, user agent, touch input and orientation. It discovers running dev servers, opens local folders with live reload, shows a QR code to open the page on a real phone, and saves screenshots at the device's native resolution. UI in Uzbek, Russian and English.
+**Mobile Preview** is a Windows and macOS app that shows how your website looks on iPhone, Samsung Galaxy, Redmi, Pixel and iPad screens — several devices side by side. Emulation runs through the Chrome DevTools Protocol, so pages get the real viewport, DPR, user agent, touch input and orientation. It discovers running dev servers, opens local folders with live reload, shows a QR code to open the page on a real phone, and saves screenshots at the device's native resolution. UI in Uzbek, Russian and English.
 
-[Download portable .exe](https://github.com/ismoillooff/Mobile-Preview/releases/latest/download/MobilePreview-Portable.exe) · [Download installer](https://github.com/ismoillooff/Mobile-Preview/releases/latest/download/MobilePreview-Setup.exe)
+[Download portable .exe](https://github.com/ismoillooff/Mobile-Preview/releases/download/v1.0.0/MobilePreview-Portable.exe) · [Download installer](https://github.com/ismoillooff/Mobile-Preview/releases/download/v1.0.0/MobilePreview-Setup.exe)
 
 ---
 

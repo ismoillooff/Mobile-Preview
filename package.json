@@ -1,7 +1,7 @@
 {
   "name": "mobile-preview",
   "productName": "Mobile Preview",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Desktop emulator that shows how web projects look on real phone and tablet screens.",
   "main": "src/main.js",
   "author": {
@@ -21,7 +21,8 @@
     "smoke": "node scripts/smoke.js",
     "dist": "electron-builder --win portable nsis --x64",
     "dist:portable": "electron-builder --win portable --x64",
-    "dist:dir": "electron-builder --win dir --x64"
+    "dist:dir": "electron-builder --win dir --x64",
+    "dist:mac": "electron-builder --mac"
   },
   "dependencies": {
     "qrcode": "^1.5.4"
@@ -48,6 +49,20 @@
         "portable",
         "nsis"
       ]
+    },
+    "mac": {
+      "category": "public.app-category.developer-tools",
+      "icon": "build/icon.png",
+      "minimumSystemVersion": "13.0",
+      "target": [
+        "dmg",
+        "zip"
+      ],
+      "artifactName": "MobilePreview-${version}-mac-${arch}.${ext}",
+      "extendInfo": {
+        "NSCameraUsageDescription": "Allow previewed websites to use the camera after you grant permission.",
+        "NSMicrophoneUsageDescription": "Allow previewed websites to use the microphone after you grant permission."
+      }
     },
     "portable": {
       "artifactName": "MobilePreview-Portable.exe"

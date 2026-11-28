@@ -8,9 +8,6 @@
   --mono: "Cascadia Mono", "Cascadia Code", Consolas, monospace;
   --toolbar-h: 48px;
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
-  --bezel-a: #2d3035;
-  --bezel-b: #121417;
-  --bezel-ring: #4b4f56;
 }
 
 :root[data-theme="dark"] {
@@ -126,6 +123,11 @@ button {
 }
 
 .toolbar button, .toolbar input, .url-wrap, .zoom { -webkit-app-region: no-drag; }
+
+:root[data-platform="darwin"] .toolbar {
+  padding-left: 88px;
+  padding-right: 8px;
+}
 
 .brand {
   display: flex;
@@ -382,22 +384,65 @@ button {
 .device-actions .tb-btn { color: var(--text-3); }
 .device-actions .tb-btn:hover { color: var(--text); }
 
+.device {
+  --rail-light: #777b82;
+  --rail-base: #42464d;
+  --rail-dark: #17191e;
+  --camera-glass: radial-gradient(circle at 39% 35%, #617591 0 8%, #29394e 13%, #101623 35%, #05070a 61%, #26292f 73%, #090a0c 83%);
+  --edge-angle: 145deg;
+}
+
 .frame {
   position: relative;
+  isolation: isolate;
   flex: none;
   width: calc(var(--fw) * var(--z) * 1px);
   height: calc(var(--fh) * var(--z) * 1px);
   padding: calc(var(--bt) * var(--z) * 1px) calc(var(--br) * var(--z) * 1px)
            calc(var(--bb) * var(--z) * 1px) calc(var(--bl) * var(--z) * 1px);
   border-radius: calc(var(--r) * var(--z) * 1px);
-  background: linear-gradient(150deg, var(--bezel-a), var(--bezel-b) 62%);
-  box-shadow:
-    var(--device-shadow),
-    inset 0 0 0 calc(1.5px * var(--z)) var(--bezel-ring),
-    inset 0 0 0 calc(3.5px * var(--z)) #08090b;
+  background: #050609;
+  box-shadow: var(--device-shadow);
 }
-.device[data-frame="island"] { --bezel-ring: #70747b; }
-.device[data-frame="tablet"] { --bezel-ring: #5d6168; }
+
+.device:not(.no-frame) .frame::before,
+.device:not(.no-frame) .frame::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+}
+.device:not(.no-frame) .frame::before {
+  z-index: -1;
+  background: linear-gradient(var(--edge-angle), var(--rail-light), var(--rail-base) 16%, var(--rail-dark) 48%, var(--rail-base) 80%, var(--rail-light));
+}
+.device:not(.no-frame) .frame::after {
+  z-index: -1;
+  inset: calc(2.4px * var(--z));
+  border-radius: max(0px, calc((var(--r) - 2.4) * var(--z) * 1px));
+  background: linear-gradient(155deg, #1a1c21, #07080a 22%, #050608 81%, #111419);
+  box-shadow: 0 0 0 max(0.5px, calc(0.7px * var(--z))) rgb(255 255 255 / 14%);
+}
+.device[data-frame="island"] { --rail-light: #b8b1a5; --rail-base: #777267; --rail-dark: #44413d; }
+.device[data-model^="iphone-16-pro"] { --rail-light: #d9bca8; --rail-base: #8f7266; --rail-dark: #4c3933; }
+.device[data-model="galaxy-s24"] { --rail-light: #9c9aa6; --rail-base: #656172; --rail-dark: #343140; }
+.device[data-model="galaxy-s24-ultra"] { --rail-light: #ada79a; --rail-base: #645f56; --rail-dark: #3b3936; }
+.device[data-model="pixel-8"] { --rail-light: #a7aba0; --rail-base: #646b5e; --rail-dark: #343b33; }
+.device[data-model="redmi-note-13"] { --rail-light: #88a59d; --rail-base: #43675c; --rail-dark: #20332c; }
+.device[data-model="galaxy-z-fold5"] { --rail-light: #879bad; --rail-base: #455968; --rail-dark: #212a35; }
+.device[data-model="galaxy-z-fold5"] .frame::after {
+  left: calc(9px * var(--z));
+  border-top-left-radius: calc(16px * var(--z));
+  border-bottom-left-radius: calc(16px * var(--z));
+}
+.device[data-model="galaxy-z-fold5"].is-landscape .frame::after {
+  left: calc(2.4px * var(--z));
+  bottom: calc(9px * var(--z));
+  border-top-left-radius: inherit;
+  border-bottom-right-radius: calc(16px * var(--z));
+}
+.device.is-landscape { --edge-angle: 55deg; }
 
 .device.no-frame .frame {
   background: none;
@@ -439,6 +484,12 @@ button {
 .sb-signal { width: calc(17px * var(--z)); }
 .sb-wifi { width: calc(15.5px * var(--z)); height: calc(11.5px * var(--z)); }
 .sb-battery { width: calc(26px * var(--z)); height: calc(12.5px * var(--z)); }
+
+.device[data-platform="android"] .statusbar { font-weight: 500; }
+.device[data-platform="android"] .sb-right { gap: calc(3.5px * var(--z)); }
+.device[data-platform="android"] .sb-signal { width: calc(12px * var(--z)); }
+.device[data-platform="android"] .sb-wifi { width: calc(13px * var(--z)); }
+.device[data-platform="android"] .sb-battery { width: calc(16px * var(--z)); }
 .sb-date { margin-left: calc(6px * var(--z)); }
 
 .device[data-frame="island"] .statusbar,
@@ -481,60 +532,97 @@ webview {
 .device.is-loading .load-bar { opacity: 1; animation: load-grow 2.4s var(--ease) forwards; }
 .device.is-done .load-bar { opacity: 0; transform: scaleX(1); transition: transform 0.2s, opacity 0.35s 0.15s; }
 
-/* Cut-outs, indicators, hardware */
-.cutout, .home-indicator, .hw, .classic-home, .classic-speaker, .tablet-cam {
+/* Front sensors, indicator and physical controls */
+.cutout, .home-indicator, .hw, .classic-home, .classic-speaker, .tablet-cam, .earpiece {
   position: absolute;
   pointer-events: none;
 }
 
-.cutout { z-index: 5; display: none; background: #000; }
-.device[data-frame="island"] .cutout {
-  display: block;
-  top: calc(11px * var(--z));
+.device {
+  --cut-width: 0px;
+  --cut-height: 0px;
+  --cut-offset: 0px;
+  --screen-cross: var(--sw);
+}
+.device.is-landscape { --screen-cross: var(--sh); }
+.device[data-frame="island"] { --cut-width: 124px; --cut-height: 36px; --cut-offset: 11px; }
+.device[data-frame="notch"] { --cut-width: 156px; --cut-height: 31px; }
+.device[data-frame="punch"] { --cut-width: 12px; --cut-height: 12px; --cut-offset: 10px; }
+.device[data-model="galaxy-s24-ultra"] { --cut-width: 11px; --cut-height: 11px; --cut-offset: 9px; }
+.device[data-model="galaxy-a51"] { --cut-width: 14px; --cut-height: 14px; --cut-offset: 9px; }
+.device[data-model="redmi-note-13"] { --cut-width: 11px; --cut-height: 11px; --cut-offset: 8px; }
+.device[data-model="pixel-8"] { --cut-width: 14px; --cut-height: 14px; --cut-offset: 10px; }
+.device[data-model="galaxy-z-fold5"] { --cut-width: 10px; --cut-height: 10px; --cut-offset: 10px; }
+
+.cutout {
+  display: none;
+  z-index: 5;
+  top: calc(var(--cut-offset) * var(--z));
   left: 50%;
-  width: calc(124px * var(--z));
-  height: calc(36px * var(--z));
+  width: min(calc(var(--cut-width) * var(--z)), calc(var(--screen-cross) * var(--z) * 0.56px));
+  height: calc(var(--cut-height) * var(--z));
   border-radius: 999px;
   transform: translateX(-50%);
+  background: #030305;
+  box-shadow: inset 0 0 0 max(0.35px, calc(0.65px * var(--z))) rgb(255 255 255 / 11%);
 }
-.device[data-frame="island"].is-landscape .cutout {
+.device:is([data-frame="island"], [data-frame="notch"], [data-frame="punch"]) .cutout { display: block; }
+.device.is-landscape .cutout {
   top: 50%;
-  left: calc(11px * var(--z));
-  width: calc(36px * var(--z));
-  height: calc(124px * var(--z));
-  transform: translateY(-50%);
+  left: calc((var(--cut-offset) + var(--cut-height) / 2) * var(--z));
+  transform: translate(-50%, -50%) rotate(-90deg);
 }
 .device[data-frame="notch"] .cutout {
-  display: block;
-  top: 0;
-  left: 50%;
-  width: calc(162px * var(--z));
-  height: calc(32px * var(--z));
-  border-radius: 0 0 calc(20px * var(--z)) calc(20px * var(--z));
-  transform: translateX(-50%);
-}
-.device[data-frame="notch"].is-landscape .cutout {
-  top: 50%;
-  left: 0;
-  width: calc(32px * var(--z));
-  height: calc(162px * var(--z));
-  border-radius: 0 calc(20px * var(--z)) calc(20px * var(--z)) 0;
-  transform: translateY(-50%);
+  border-radius: 0 0 calc(21px * var(--z)) calc(21px * var(--z));
+  box-shadow: none;
 }
 .device[data-frame="punch"] .cutout {
-  display: block;
-  top: calc(10px * var(--z));
-  left: 50%;
-  width: calc(12px * var(--z));
-  height: calc(12px * var(--z));
-  border-radius: 50%;
-  transform: translateX(-50%);
-  box-shadow: inset 0 0 0 calc(2px * var(--z)) #1d1f23;
+  background: var(--camera-glass);
+  box-shadow: 0 0 0 max(.35px, calc(.75px * var(--z))) #07080b;
 }
-.device[data-frame="punch"].is-landscape .cutout {
+.device:is([data-frame="island"], [data-frame="notch"]) .cutout::before {
+  content: '';
+  position: absolute;
   top: 50%;
-  left: calc(10px * var(--z));
+  right: calc(11px * var(--z));
+  width: calc(12px * var(--z));
+  aspect-ratio: 1;
   transform: translateY(-50%);
+  border-radius: 50%;
+  background: var(--camera-glass);
+}
+.device[data-frame="notch"] .cutout::before {
+  right: auto;
+  left: calc(27px * var(--z));
+}
+.device[data-frame="island"] .cutout::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: calc(12px * var(--z));
+  width: calc(41px * var(--z));
+  height: calc(12px * var(--z));
+  border-radius: 999px;
+  background: linear-gradient(90deg, #08090c, #060608);
+  transform: translateY(-50%);
+}
+
+.earpiece { display: none; }
+.device:is([data-frame="notch"], [data-frame="island"], [data-frame="punch"]) .earpiece {
+  display: block;
+  z-index: 1;
+  top: calc(3.6px * var(--z));
+  left: 50%;
+  width: calc(49px * var(--z));
+  height: max(.6px, calc(1.75px * var(--z)));
+  border-radius: 999px;
+  transform: translateX(-50%);
+  background: repeating-linear-gradient(90deg, #23252a 0 1px, #080a0e 1px 2px);
+}
+.device.is-landscape .earpiece {
+  top: 50%;
+  left: calc(4.5px * var(--z));
+  transform: translate(-50%, -50%) rotate(-90deg);
 }
 
 .home-indicator {
@@ -549,26 +637,50 @@ webview {
   transition: background-color 0.25s;
 }
 .device[data-indicator="android"] .home-indicator { width: calc(104px * var(--z)); height: max(2px, calc(4px * var(--z))); bottom: calc(6px * var(--z)); }
-.device[data-frame="tablet"] .home-indicator { width: calc(190px * var(--z)); }
+.device[data-frame="tablet"][data-indicator="ios"] .home-indicator { width: calc(190px * var(--z)); }
 .device.is-landscape[data-indicator="ios"]:not([data-frame="tablet"]) .home-indicator { width: calc(210px * var(--z)); bottom: calc(6px * var(--z)); }
 .device[data-indicator="none"] .home-indicator { display: none; }
 
 .hw {
-  z-index: -1;
-  width: calc(3.5px * var(--z));
+  z-index: -2;
+  width: calc(3px * var(--z));
+  height: var(--button-length);
+  top: var(--button-position);
   border-radius: calc(2px * var(--z));
-  background: linear-gradient(90deg, #555a61, #2a2d32);
+  background: linear-gradient(90deg, var(--rail-light), var(--rail-base) 48%, var(--rail-dark));
+  box-shadow: 0 0 0 max(.25px, calc(.4px * var(--z))) var(--rail-dark);
 }
-.hw-a { right: calc(-2.5px * var(--z)); top: 24%; height: 11%; }
-.hw-b { left: calc(-2.5px * var(--z)); top: 19%; height: 6.5%; }
-.hw-c { left: calc(-2.5px * var(--z)); top: 27.5%; height: 6.5%; }
-.device.is-landscape .hw { width: auto; height: calc(3.5px * var(--z)); background: linear-gradient(180deg, #555a61, #2a2d32); }
-.device.is-landscape .hw-a { top: calc(-2.5px * var(--z)); right: auto; left: 24%; width: 11%; }
-.device.is-landscape .hw-b { left: 19%; top: auto; bottom: calc(-2.5px * var(--z)); width: 6.5%; }
-.device.is-landscape .hw-c { left: 27.5%; top: auto; bottom: calc(-2.5px * var(--z)); width: 6.5%; }
-.device[data-frame="tablet"] .hw-b, .device[data-frame="tablet"] .hw-c { display: none; }
-.device[data-frame="tablet"] .hw-a { top: 8%; height: 6%; }
-.device[data-frame="tablet"].is-landscape .hw-a { left: 8%; width: 6%; top: calc(-2.5px * var(--z)); }
+.hw-power { --button-position: 25%; --button-length: 11%; }
+.hw-volume-up { --button-position: 21.5%; --button-length: 6.4%; }
+.hw-volume-down { --button-position: 29.2%; --button-length: 6.4%; }
+.hw-action { --button-position: 15.5%; --button-length: 3.6%; }
+.hw-camera { --button-position: 68%; --button-length: 7%; display: none; }
+.hw-power, .hw-camera { right: calc(-1.8px * var(--z)); }
+.hw-volume-up, .hw-volume-down, .hw-action { left: calc(-1.8px * var(--z)); }
+.device[data-model^="iphone-16-pro"] .hw-camera { display: block; right: calc(-.8px * var(--z)); }
+
+.device[data-platform="android"] .hw-power { --button-position: 38%; --button-length: 7.5%; }
+.device[data-platform="android"] .hw-volume-up { --button-position: 22%; --button-length: 13%; left: auto; right: calc(-1.8px * var(--z)); }
+.device[data-model="pixel-8"] .hw-power { --button-position: 25%; }
+.device[data-model="pixel-8"] .hw-volume-up { --button-position: 35%; }
+.device[data-platform="android"] :is(.hw-volume-down, .hw-action) { display: none; }
+
+.device[data-frame="tablet"] .hw-power { --button-position: 8%; --button-length: 5%; }
+.device[data-frame="tablet"] .hw-volume-up { --button-position: 16%; --button-length: 7%; }
+.device[data-frame="tablet"] :is(.hw-volume-down, .hw-action) { display: none; }
+
+.device.is-landscape .hw {
+  width: var(--button-length);
+  height: calc(3px * var(--z));
+  left: var(--button-position);
+  right: auto;
+  background: linear-gradient(180deg, var(--rail-light), var(--rail-base) 48%, var(--rail-dark));
+}
+.device.is-landscape :is(.hw-power, .hw-camera),
+.device[data-platform="android"].is-landscape .hw-volume-up { top: calc(-1.8px * var(--z)); }
+.device[data-model^="iphone-16-pro"].is-landscape .hw-camera { top: calc(-.8px * var(--z)); right: auto; }
+.device[data-platform="android"].is-landscape .hw-volume-up { left: var(--button-position); right: auto; bottom: auto; }
+.device.is-landscape :is(.hw-volume-up, .hw-volume-down, .hw-action) { top: auto; bottom: calc(-1.8px * var(--z)); }
 
 .classic-home, .classic-speaker { display: none; }
 .device[data-frame="classic"] .classic-home {
@@ -592,6 +704,17 @@ webview {
   background: #08090b;
   box-shadow: inset 0 0 0 calc(1px * var(--z)) #30333a;
 }
+.classic-speaker::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: calc(-14px * var(--z));
+  width: calc(7px * var(--z));
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--camera-glass);
+  transform: translateY(-50%);
+}
 .device[data-frame="classic"].is-landscape .classic-home {
   bottom: auto;
   top: 50%;
@@ -606,6 +729,12 @@ webview {
   height: calc(60px * var(--z));
   transform: translateY(-50%);
 }
+.device[data-frame="classic"].is-landscape .classic-speaker::before {
+  top: auto;
+  bottom: calc(-14px * var(--z));
+  left: 50%;
+  transform: translateX(-50%);
+}
 
 .tablet-cam { display: none; }
 .device[data-frame="tablet"] .tablet-cam {
@@ -616,7 +745,13 @@ webview {
   height: calc(6px * var(--z));
   border-radius: 50%;
   transform: translateX(-50%);
-  background: #1e2227;
+  background: var(--camera-glass);
+}
+.device:is([data-model="ipad-air"], [data-model="galaxy-tab-s9"]) .tablet-cam {
+  top: 50%;
+  left: auto;
+  right: calc(5px * var(--z));
+  transform: translateY(-50%);
 }
 .device[data-frame="tablet"].is-landscape .tablet-cam {
   top: 50%;
@@ -624,8 +759,15 @@ webview {
   transform: translateY(-50%);
 }
 
+.device:is([data-model="ipad-air"], [data-model="galaxy-tab-s9"]).is-landscape .tablet-cam {
+  top: calc(5px * var(--z));
+  left: 50%;
+  right: auto;
+  transform: translateX(-50%);
+}
+
 .device.no-frame .hw, .device.no-frame .cutout, .device.no-frame .home-indicator,
-.device.no-frame .classic-home, .device.no-frame .classic-speaker, .device.no-frame .tablet-cam { display: none; }
+.device.no-frame :is(.classic-home, .classic-speaker, .tablet-cam, .earpiece) { display: none; }
 
 /* In-screen error / crash overlay */
 .screen-overlay {
@@ -977,4 +1119,59 @@ input[type="number"].field { font-variant-numeric: tabular-nums; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 1ms !important; transition-duration: 1ms !important; }
+}
+
+/* Brand and model-family catalogue */
+.device-search { display: block; padding: 4px 14px 12px; }
+.device-search .field { width: 100%; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.device-brand { border-top: 1px solid var(--line); padding: 6px; }
+.device-brand > summary, .device-family > summary {
+  cursor: pointer;
+  padding: 10px 9px;
+  font-weight: 600;
+  border-radius: 6px;
+}
+.device-brand > summary { color: var(--text); font-size: 13px; }
+.device-family { margin-left: 12px; }
+.device-family > summary { color: var(--text-2); font-size: 12px; font-weight: 500; }
+.device-brand summary:hover { background: var(--hover); }
+.device-brand summary span { float: right; font: 11px var(--mono); color: var(--text-3); padding-top: 2px; }
+.device-catalogue [hidden], .device-no-results[hidden] { display: none; }
+.device-no-results { padding: 12px 18px; color: var(--text-2); font-size: 13px; }
+
+/* Materials and sensors follow each model's front housing. */
+.device.wide-notch { --cut-width: 210px; --cut-height: 31px; }
+.device.wide-notch .sb-mid { width: calc(210px * var(--z)); }
+.device[data-model^="iphone-12-pro"] { --rail-light: #b9c9d3; --rail-base: #607783; --rail-dark: #263d49; }
+.device[data-model^="iphone-13-pro"] { --rail-light: #d1dce3; --rail-base: #8b9eac; --rail-dark: #4a5865; }
+.device[data-model^="iphone-14-pro"] { --rail-light: #a7a1b6; --rail-base: #645d74; --rail-dark: #332c44; }
+.device:is([data-model="iphone-15"], [data-model="iphone-15-plus"]) { --rail-light: #cadbd2; --rail-base: #95ada0; --rail-dark: #415c4e; }
+.device:is([data-model="iphone-16"], [data-model="iphone-16-plus"]) { --rail-light: #a9b4ef; --rail-base: #6472c1; --rail-dark: #303a6e; }
+.device[data-model^="iphone-16"] .hw-camera { display: block; }
+.device[data-model^="iphone-12"] .hw-action,
+.device[data-model^="iphone-13"] .hw-action,
+.device[data-model^="iphone-14"] .hw-action,
+.device[data-model="iphone-se"] .hw-action,
+.device[data-model="iphone-15"] .hw-action,
+.device[data-model="iphone-15-plus"] .hw-action { --button-length: 2.7%; }
+.device[data-brand="Apple"]:not([data-frame="tablet"]):not(.no-frame) .frame {
+  background:
+    linear-gradient(to bottom, transparent 8%, #767778 8% 8.35%, transparent 8.35% 90%, #767778 90% 90.35%, transparent 90.35%) left / calc(2px * var(--z)) 100% no-repeat,
+    linear-gradient(to bottom, transparent 8%, #767778 8% 8.35%, transparent 8.35% 90%, #767778 90% 90.35%, transparent 90.35%) right / calc(2px * var(--z)) 100% no-repeat;
+}
+.device[data-brand="Apple"].is-landscape:not([data-frame="tablet"]):not(.no-frame) .frame {
+  background:
+    linear-gradient(to right, transparent 8%, #767778 8% 8.35%, transparent 8.35% 90%, #767778 90% 90.35%, transparent 90.35%) top / 100% calc(2px * var(--z)) no-repeat,
+    linear-gradient(to right, transparent 8%, #767778 8% 8.35%, transparent 8.35% 90%, #767778 90% 90.35%, transparent 90.35%) bottom / 100% calc(2px * var(--z)) no-repeat;
+}
+.device[data-brand="Google"] { --rail-light: #a7aba0; --rail-base: #646b5e; --rail-dark: #343b33; }
+.device[data-brand="Google"] .hw-power { --button-position: 25%; }
+.device[data-brand="Google"] .hw-volume-up { --button-position: 35%; }
+.device[data-frame="classic"] .classic-home {
+  background: radial-gradient(circle at 50% 35%, #111318, #060709 72%);
+  box-shadow: inset 0 0 0 calc(1.5px * var(--z)) #656970, inset 0 calc(-2px * var(--z)) calc(3px * var(--z)) #25282d;
+}
+.device:not(.no-frame) .screen {
+  box-shadow: 0 0 0 max(.4px, calc(.65px * var(--z))) #303238;
 }

@@ -46,6 +46,9 @@
     signal: '<svg class="sb-glyph sb-signal" viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7.5" width="3.2" height="4.5" rx="1"/><rect x="4.9" y="5" width="3.2" height="7" rx="1"/><rect x="9.8" y="2.5" width="3.2" height="9.5" rx="1"/><rect x="14.7" y="0" width="3.2" height="12" rx="1"/></svg>',
     wifi: '<svg class="sb-glyph sb-wifi" viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.2c2.3 0 4.4.9 6 2.4l1.2-1.3A10.4 10.4 0 0 0 8 .4C5.2.4 2.7 1.5.8 3.3L2 4.6a8.6 8.6 0 0 1 6-2.4Z"/><path d="M8 5.8c1.4 0 2.6.5 3.6 1.4l1.2-1.3A7 7 0 0 0 8 4a7 7 0 0 0-4.8 1.9l1.2 1.3c1-.9 2.2-1.4 3.6-1.4Z"/><path d="M8 9.3c.5 0 .9.2 1.3.5L8 11.6 6.7 9.8c.4-.3.8-.5 1.3-.5Z"/></svg>',
     battery: '<svg class="sb-glyph sb-battery" viewBox="0 0 27 13" aria-hidden="true"><rect x=".6" y=".6" width="23" height="11.8" rx="3.6" fill="none" stroke="currentColor" stroke-opacity=".4" stroke-width="1.1"/><rect x="2.4" y="2.4" width="17.6" height="8.2" rx="2"/><path d="M25.2 4.4v4.2a2.2 2.2 0 0 0 0-4.2Z" fill-opacity=".45"/></svg>',
+    androidSignal: '<svg class="sb-glyph sb-signal" viewBox="0 0 14 14" aria-hidden="true"><path d="M1 13 13 1v12Z" opacity=".35"/><path d="M1 13 10 4v9Z"/></svg>',
+    androidWifi: '<svg class="sb-glyph sb-wifi" viewBox="0 0 16 14" aria-hidden="true"><path d="M.5 4.2a11.4 11.4 0 0 1 15 0L8 13.4Z" opacity=".35"/><path d="M3 7.2a7.5 7.5 0 0 1 10 0l-5 6.2Z"/></svg>',
+    androidBattery: '<svg class="sb-glyph sb-battery" viewBox="0 0 18 12" aria-hidden="true"><rect x=".5" y="1.5" width="15" height="9" rx="3.5" fill="none" stroke="currentColor"/><rect x="2.2" y="3.2" width="9.8" height="5.6" rx="2"/><path d="M16.5 4h.8v4h-.8Z"/></svg>',
   };
 
   window.MP = window.MP || {};

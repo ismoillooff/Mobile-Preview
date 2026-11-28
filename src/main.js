@@ -6,7 +6,7 @@ const {
 const path = require('node:path');
 const fs = require('node:fs');
 const os = require('node:os');
-const { pathToFileURL } = require('node:url');
+const { fileURLToPath, pathToFileURL } = require('node:url');
 const QRCode = require('qrcode');
 const { scanLocalServers } = require('./main/ports');
 const { StaticServer } = require('./main/static-server');
@@ -15,6 +15,7 @@ const RENDERER_DIR = path.join(__dirname, 'renderer');
 const START_URL = pathToFileURL(path.join(RENDERER_DIR, 'start.html')).href;
 const CHROME_MAJOR = process.versions.chrome.split('.')[0];
 const SMOKE_DIR = process.env.MP_SMOKE || '';
+const IS_MAC = process.platform === 'darwin';
 
 // Smoke runs use a throwaway profile so they never touch the user's settings.
 if (SMOKE_DIR) app.setPath('userData', path.join(os.tmpdir(), `mobile-preview-smoke-${process.pid}`));
@@ -91,7 +92,9 @@ function createWindow() {
     backgroundColor: palette.bg,
     icon: fs.existsSync(iconPath) ? iconPath : undefined,
     titleBarStyle: 'hidden',
-    titleBarOverlay: { color: palette.color, symbolColor: palette.symbolColor, height: 48 },
+    ...(IS_MAC
+      ? { trafficLightPosition: { x: 14, y: 16 } }
+      : { titleBarOverlay: { color: palette.color, symbolColor: palette.symbolColor, height: 48 } }),
     show: false,
     skipTaskbar: !!SMOKE_DIR,
     webPreferences: {
@@ -125,7 +128,7 @@ function createWindow() {
 
   win.webContents.on('before-input-event', (event, input) => {
     if (input.type !== 'keyDown') return;
-    const ctrl = input.control || input.meta;
+    const ctrl = IS_MAC ? input.meta : input.control || input.meta;
     if (!app.isPackaged && ctrl && input.shift && input.key.toLowerCase() === 'i') {
       event.preventDefault();
       win.webContents.toggleDevTools();
@@ -166,7 +169,7 @@ const MENU_TEXT = {
 
 function shortcutFor(input) {
   if (input.type !== 'keyDown') return null;
-  const ctrl = input.control || input.meta;
+  const ctrl = IS_MAC ? input.meta : input.control || input.meta;
   const key = (input.key || '').toLowerCase();
   if (input.key === 'F5' || (ctrl && key === 'r')) return input.shift ? 'hardReload' : 'reload';
   if (input.key === 'F12' || (ctrl && input.shift && key === 'i')) return 'devtools';
@@ -174,6 +177,11 @@ function shortcutFor(input) {
   if (ctrl && (key === '=' || key === '+')) return 'zoomIn';
   if (ctrl && key === '-') return 'zoomOut';
   if (ctrl && key === '0') return 'zoomFit';
+  if (IS_MAC) {
+    if (ctrl && key === '[') return 'back';
+    if (ctrl && key === ']') return 'forward';
+    return null;
+  }
   if (input.alt && input.key === 'ArrowLeft') return 'back';
   if (input.alt && input.key === 'ArrowRight') return 'forward';
   return null;
@@ -194,7 +202,7 @@ app.on('web-contents-created', (_event, wc) => {
     if (!/^file:/i.test(url) || url.startsWith(START_URL)) return;
     event.preventDefault();
     try {
-      const target = server.urlForPath(require('node:url').fileURLToPath(url));
+      const target = server.urlForPath(fileURLToPath(url));
       if (target.url) {
         attachWatcherNotifier();
         wc.loadURL(target.url);
@@ -410,7 +418,10 @@ function attachWatcherNotifier() {
 ipcMain.handle('path:open', async (_e, p) => {
   try {
     await server.ready;
-    const res = server.urlForPath(p);
+    let localPath = p;
+    if (typeof p === 'string' && /^file:\/\//i.test(p)) localPath = fileURLToPath(p);
+    else if (IS_MAC && typeof p === 'string' && p.startsWith('~/')) localPath = path.join(os.homedir(), p.slice(2));
+    const res = server.urlForPath(localPath);
     if (res.url) attachWatcherNotifier();
     return res;
   } catch (err) {
@@ -472,6 +483,7 @@ ipcMain.handle('app:info', () => ({
   startUrl: START_URL,
   chromeMajor: CHROME_MAJOR,
   version: app.getVersion(),
+  platform: process.platform,
   shotsDir: shotsDir(),
   smokeUrl: process.env.MP_SMOKE_URL || '',
   smokeState: process.env.MP_SMOKE_STATE ? JSON.parse(process.env.MP_SMOKE_STATE) : null,
@@ -489,9 +501,11 @@ ipcMain.handle('scan:ports', () => scanLocalServers({ exclude: server.port ? [se
 ipcMain.on('ui:theme', (_e, dark) => {
   if (!win) return;
   const palette = dark ? CHROME_COLORS.dark : CHROME_COLORS.light;
-  try {
-    win.setTitleBarOverlay({ color: palette.color, symbolColor: palette.symbolColor, height: 48 });
-  } catch { /* not supported on this platform */ }
+  if (!IS_MAC) {
+    try {
+      win.setTitleBarOverlay({ color: palette.color, symbolColor: palette.symbolColor, height: 48 });
+    } catch { /* not supported on this platform */ }
+  }
   win.setBackgroundColor(palette.bg);
 });
 
@@ -556,20 +570,33 @@ function runSmoke() {
 /* ------------------------------------------------------------------ */
 
 app.on('second-instance', () => {
-  if (!win) return;
+  if (!win) {
+    if (IS_MAC && app.isReady()) createWindow();
+    return;
+  }
   if (win.isMinimized()) win.restore();
   win.focus();
 });
 
 app.whenReady().then(() => {
   loadSettings();
-  Menu.setApplicationMenu(null);
+  Menu.setApplicationMenu(IS_MAC ? Menu.buildFromTemplate([
+    { label: 'Mobile Preview', role: 'appMenu' },
+    { role: 'editMenu' },
+    { role: 'windowMenu' },
+  ]) : null);
   setupPreviewSession();
   server.start().catch((err) => console.error('[server] failed to start:', err.message));
   createWindow();
 });
 
-app.on('window-all-closed', () => {
-  server.stop();
-  app.quit();
+app.on('activate', () => {
+  if (IS_MAC && !win) createWindow();
 });
+
+app.on('window-all-closed', () => {
+  if (IS_MAC) server.stopSharing();
+  else app.quit();
+});
+
+app.on('before-quit', () => server.stop());

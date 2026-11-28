@@ -4,6 +4,8 @@
 
   const STRINGS = {
     uz: {
+      deviceSearch: 'Brend yoki modelni qidirish',
+      deviceNoResults: 'Mos qurilma topilmadi',
       back: 'Orqaga',
       forward: 'Oldinga',
       reload: 'Qayta yuklash (Ctrl+R)',
@@ -89,6 +91,8 @@
       portrait: 'Portret',
     },
     ru: {
+      deviceSearch: 'Поиск бренда или модели',
+      deviceNoResults: 'Устройства не найдены',
       back: 'Назад',
       forward: 'Вперёд',
       reload: 'Перезагрузить (Ctrl+R)',
@@ -174,6 +178,8 @@
       portrait: 'Портретная',
     },
     en: {
+      deviceSearch: 'Search brand or model',
+      deviceNoResults: 'No matching devices',
       back: 'Back',
       forward: 'Forward',
       reload: 'Reload (Ctrl+R)',
@@ -274,7 +280,8 @@
   }
 
   function t(key) {
-    return (STRINGS[current] && STRINGS[current][key]) || STRINGS.en[key] || key;
+    const text = (STRINGS[current] && STRINGS[current][key]) || STRINGS.en[key] || key;
+    return document.documentElement.dataset.platform === 'darwin' ? text.replace('Ctrl', '⌘') : text;
   }
 
   window.MP = window.MP || {};
