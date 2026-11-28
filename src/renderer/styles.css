@@ -1175,3 +1175,4 @@ input[type="number"].field { font-variant-numeric: tabular-nums; }
 .device:not(.no-frame) .screen {
   box-shadow: 0 0 0 max(.4px, calc(.65px * var(--z))) #303238;
 }
+.device.no-frame .hw { display: none; }
